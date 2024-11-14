@@ -95,6 +95,12 @@ class MongoTestClient:
 
     @staticmethod
     def charger_configs():
+        # Charger les configurations de connexion à la BD
+        # Lors de votre inscription à MongoDB Atlas, vous pourrez créer un fichier atlas.json contenant le "user" et le "password"
+        # {
+        #   "user": "votre_user_atlas
+        #   "password": "votre_password_atlas"
+        # }
         with open("./atlas.json") as fichier_json:
             return json.load(fichier_json)
 
