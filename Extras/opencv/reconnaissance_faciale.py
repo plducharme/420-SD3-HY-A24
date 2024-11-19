@@ -5,6 +5,7 @@
 
 import cv2
 
+
 class ReconnaissanceFaciale:
     def __init__(self):
         # On charge le modèle pré-entraîné pour la reconnaissance faciale
@@ -37,7 +38,6 @@ class ReconnaissanceFaciale:
                 cv2.rectangle(roi_color, (sx, sy), (sx + sw, sy + sh), (0, 0, 255), 2)
         return faces
 
-
     def executer(self):
         while True:
             ret, frame_video = self.capture_video.read()
@@ -50,5 +50,6 @@ class ReconnaissanceFaciale:
 
         self.capture_video.release()
         cv2.destroyAllWindows()
+
 
 app = ReconnaissanceFaciale()
