@@ -43,6 +43,7 @@ class ReconnaissanceFaciale:
             ret, frame_video = self.capture_video.read()
             self.detection_faces(frame_video)
             cv2.imshow('Reconnaissance faciale', frame_video)
+            # Touche d'échappement pour quitter (esc)
             k = cv2.waitKey(30) & 0xff
             if k == 27:
                 break
