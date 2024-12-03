@@ -2,14 +2,18 @@ from typing import List
 from typing import Optional
 from sqlalchemy import ForeignKey, create_engine
 from sqlalchemy import String
+from sqlalchemy import select
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
+from sqlalchemy.orm import Session
+
 
 # Super classe pour tous les objets (modèle) qui seront utilisés pour la base de données
 class Base(DeclarativeBase):
     pass
+
 
 # Les classes qui héritent de Base sont des modèles pour la base de données
 class User(Base):
@@ -26,8 +30,10 @@ class User(Base):
     addresses: Mapped[List["Address"]] = relationship(
         back_populates="user", cascade="all, delete-orphan"
     )
+
     def __repr__(self) -> str:
         return f"User(id={self.id!r}, name={self.name!r}, fullname={self.fullname!r})"
+
 
 class Address(Base):
     __tablename__ = "address"
@@ -35,18 +41,20 @@ class Address(Base):
     email_address: Mapped[str]
     user_id: Mapped[int] = mapped_column(ForeignKey("user_account.id"))
     user: Mapped["User"] = relationship(back_populates="addresses")
+
     def __repr__(self) -> str:
         return f"Address(id={self.id!r}, email_address={self.email_address!r})"
 
+
 # Créer un moteur pour la base de données
 engine = create_engine("sqlite:///exemple.db")
+# Au cas où la base de données existe déjà, on supprime les tables existantes
+Base.metadata.drop_all(engine, checkfirst=True)
 # Créer les tables dans la base de données
 Base.metadata.create_all(engine)
 
-# Exemple d'utilisation
-from sqlalchemy.orm import Session
-# On utilise Session pour initier une session transactionnelle
 
+# On utilise Session pour initier une session transactionnelle
 with Session(engine) as session:
     spongebob = User(
         name="spongebob",
@@ -68,8 +76,6 @@ with Session(engine) as session:
     # Le commit exécute la transaction. Si une erreur survient, la transaction est annulée.
     session.commit()
 
-# Exemple de requête
-from sqlalchemy import select
 
 session = Session(engine)
 # On utilise select pour créer une requête
@@ -105,5 +111,3 @@ sandy.addresses.remove(sandy_address)
 
 session.delete(patrick)
 session.commit()
-
-
