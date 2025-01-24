@@ -33,21 +33,21 @@ class Compteur:
             time.sleep(0.1)
             self.valeur = copie_locale
 
-        # print(threading.current_thread().name, self.valeur, locked)
+        print(threading.current_thread().name, self.valeur, locked)
 
 
 if __name__ == "__main__":
     compteur_locked = Compteur()
 
+
     def incrementer_compteur(compteur: Compteur, locked=True):
         for _ in range(10):
             compteur.incrementer(locked)
 
+
     with ThreadPoolExecutor(max_workers=8) as executor:
         for _ in range(10):
             executor.submit(incrementer_compteur, compteur_locked, True)
-
-    print("Avec le verrou", compteur_locked.valeur)
 
     compteur_unlocked = Compteur()
 
@@ -55,9 +55,6 @@ if __name__ == "__main__":
         for _ in range(10):
             executor.submit(incrementer_compteur, compteur_unlocked, False)
 
+    print("Avec le verrou", compteur_locked.valeur)
     print("Sans le verrou", compteur_unlocked.valeur)
     print("Résultat attendu: 100")
-
-
-
-

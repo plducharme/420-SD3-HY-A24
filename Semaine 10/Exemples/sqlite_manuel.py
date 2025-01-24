@@ -22,6 +22,7 @@ class BasesSQL(QMainWindow):
 
         jeux_db = JeuxBD()
         # Exécute toutes les requêtes
+        jeux_db.supprimer_table()
         jeux_db.creer_table()
 
         self.textarea.setText(self.textarea.toPlainText() + "\nInsertion\n")
@@ -71,7 +72,7 @@ class JeuxBD:
     def supprimer_table(self):
         # Créer un curseur pour exécuter une requête
         curseur = self.con.cursor()
-        curseur.execute("DROP TABLE Jeu")
+        curseur.execute("DROP TABLE IF EXISTS Jeu")
 
     def inserer_jeux(self, liste_jeux: list[Jeu]):
         # Créer un curseur pour exécuter une requête
